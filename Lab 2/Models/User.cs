@@ -30,5 +30,7 @@ namespace Lab_2.Models
         [Required]
         [Display(Name = "Number of Siblings")]
         public string NumberOfSiblings { get; set; }
+
+        public List<Group> Groups { get; set; }
     }
 }

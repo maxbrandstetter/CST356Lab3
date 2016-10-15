@@ -12,5 +12,7 @@ namespace Lab_2.Data
         }
 
         public DbSet<User> User { get; set; }
+
+        public DbSet<Group> Groups { get; set; }
     }
 }

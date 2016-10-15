@@ -11,28 +11,28 @@ using Lab_2.Models;
 
 namespace Lab_2.Controllers
 {
-    public class UserController : Controller
+    public class GroupController : Controller
     {
         private readonly IUserRepository _userRepository;
 
-        public UserController()
+        public GroupController()
         {
             _userRepository = new UserRepository();
         }
 
-        public UserController(IUserRepository userRepository)
+        public GroupController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
 
-        // GET: User
+        // GET: Group
         public ActionResult Index()
         {
-            var users = _userRepository.GetUsers();
-            return View(users);
+            var groups = _userRepository.GetGroups();
+            return View(groups);
         }
 
-        // GET: User/Details/5
+        // GET: Group/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -40,48 +40,39 @@ namespace Lab_2.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            User user = _userRepository.GetUser(id.Value);
+            Group group = _userRepository.GetGroup(id.Value);
 
-            if (user == null)
+            if (group == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(group);
         }
 
-        // GET: User/Create
+        // GET: Group/Create
         public ActionResult Create()
         {
-            GetGroupList();
-
             return View();
         }
 
-        // POST: User/Create
+        // POST: Group/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserId,FirstName,LastName,EmailAddress,NumberOfSiblings")] User user, List<int> groupIds)
+        public ActionResult Create([Bind(Include = "GroupId,Name")] Group group)
         {
             if (ModelState.IsValid)
             {
-                user.Groups = new List<Group>();
-                foreach (var groupId in groupIds)
-                {
-                    user.Groups.Add(new Group
-                    {
-                        GroupId = groupId
-                    });
-                }
-
-                _userRepository.AddUser(user);
+                _userRepository.AddGroup(group);
 
                 return RedirectToAction("Index");
             }
 
-            return View(user);
+            return View(group);
         }
 
-        // GET: User/Edit/5
+        // GET: Group/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -89,32 +80,33 @@ namespace Lab_2.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            User user = _userRepository.GetUser(id.Value);
+            Group group = _userRepository.GetGroup(id.Value);
 
-            if (user == null)
+            if (group == null)
             {
                 return HttpNotFound();
             }
-
-            return View(user);
+            return View(group);
         }
 
-        // POST: User/Edit/5
+        // POST: Group/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserId,FirstName,LastName,EmailAddress,NumberOfSiblings")] User user)
+        public ActionResult Edit([Bind(Include = "GroupId,Name")] Group group)
         {
             if (!ModelState.IsValid)
             {
-                return View(user);
+                return View(group);
             }
 
-            _userRepository.UpdateUser(user);
+            _userRepository.UpdateGroup(group);
 
             return RedirectToAction("Index");
         }
 
-        // GET: User/Delete/5
+        // GET: Group/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -122,32 +114,22 @@ namespace Lab_2.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            User user = _userRepository.GetUser(id.Value);
+            Group group = _userRepository.GetGroup(id.Value);
 
-            if (user == null)
+            if (group == null)
             {
                 return HttpNotFound();
             }
-
-            _userRepository.RemoveUser(user);
-
-            return RedirectToAction("Index");
+            return View(group);
         }
 
-        // POST: User/Delete/5
+        // POST: Group/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            User user = _userRepository.GetUser(id);
+            Group group = _userRepository.GetGroup(id);
             return RedirectToAction("Index");
         }
-
-        private void GetGroupList()
-        {
-            var groups = _userRepository.GetGroups();
-            ViewBag.GroupList = new MultiSelectList(groups, "GroupId", "Name");
-        }
-        
     }
 }
