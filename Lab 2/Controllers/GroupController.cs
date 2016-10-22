@@ -14,12 +14,7 @@ namespace Lab_2.Controllers
     public class GroupController : Controller
     {
         private readonly IUserRepository _userRepository;
-
-        public GroupController()
-        {
-            _userRepository = new UserRepository();
-        }
-
+        
         public GroupController(IUserRepository userRepository)
         {
             _userRepository = userRepository;

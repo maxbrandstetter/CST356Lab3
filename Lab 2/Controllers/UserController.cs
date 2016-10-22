@@ -8,27 +8,31 @@ using System.Web;
 using System.Web.Mvc;
 using Lab_2.Data;
 using Lab_2.Models;
+using Lab_2.Services;
 
 namespace Lab_2.Controllers
 {
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
 
-        public UserController()
-        {
-            _userRepository = new UserRepository();
-        }
-
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, IUserService userService)
         {
             _userRepository = userRepository;
+            _userService = userService;
         }
 
         // GET: User
         public ActionResult Index()
         {
             var users = _userRepository.GetUsers();
+
+            foreach (var user in users)
+            {
+                user.OnlyChild = _userService.UserIsOnlyChild(user);
+            }
+
             return View(users);
         }
 

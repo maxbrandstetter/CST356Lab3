@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Lab_2.Models
 {
@@ -32,5 +33,8 @@ namespace Lab_2.Models
         public string NumberOfSiblings { get; set; }
 
         public List<Group> Groups { get; set; }
+
+        [NotMapped]
+        public bool OnlyChild { get; set; }
     }
 }
